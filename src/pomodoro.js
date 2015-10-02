@@ -12,6 +12,7 @@
 //   start pomodoro <time> - start a new pomodoro with a duration of <time> minutes
 //   stop pomodoro - stop a pomodoro
 //   pomodoro? - shows the details of the current pomodoro
+//   pomodoro <username>? - shows the details of <username>'s current pomodoro
 //   all pomodoros? - shows the details of the current pomodoro
 //
 // Author:
@@ -197,6 +198,21 @@ module.exports = function (robot) {
 			msg.send('There are still ' + minutes + ' minutes in this pomodoro');
 		} else {
 			msg.send('You have not started a pomodoro');
+		}
+	});
+
+	robot.respond(/pomodoro ([\w_-]+)\?/i, function (msg) {
+		var userName = msg.match[1];
+		var pomodoro;
+		var minutes;
+
+		if (hasPomodoro(userName)) {
+			pomodoro = brain.get('user.' + userName);
+			minutes = getRemaining(pomodoro);
+
+			msg.send('There are still ' + minutes + ' minutes in ' + userName + '\'s pomodoro');
+		} else {
+			msg.send(userName + ' has not started a pomodoro');
 		}
 	});
 
