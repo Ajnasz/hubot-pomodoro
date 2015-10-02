@@ -125,18 +125,23 @@ module.exports = function (robot) {
 	}
 
 	function completePomodoro(userName) {
+		var pomodoro = brain.get('user.' + userName);
 		robot.logger.info('pomodoro completed: %s', userName);
 		stopPomodoro(userName);
-		robot.send(userName, 'Pomodoro completed!');
+
+		if (pomodoro) {
+			robot.reply(pomodoro.envelope, 'Pomodoro completed!');
+		}
 	}
 
-	function startPomodoro(userName, len) {
+	function startPomodoro(userName, envelope, len) {
 		len = len || defaultLength;
 
 		robot.logger.info('start pomodoro for user %s, length %d', userName, len);
 
 		brain.set('user.' + userName, {
 			started: Date.now(),
+			envelope: envelope,
 			len: len,
 			user: userName
 		});
@@ -174,7 +179,7 @@ module.exports = function (robot) {
 		if (hasPomodoro(userName)) {
 			msg.send('Pomodoro already started');
 		} else {
-			startPomodoro(userName, msg.match[1]);
+			startPomodoro(userName, msg.envelope, msg.match[1]);
 			msg.send('Pomodoro started!');
 		}
 	});
