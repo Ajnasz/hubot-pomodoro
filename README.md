@@ -2,6 +2,18 @@
 
 Hubot script that allows you to start and stop pomodoro sessions and notify when it's over.
 
+Usage
+-----
+```sh
+npm install --save hubot-pomodoro
+```
+
+Open `external-scripts.json` and enable the module, by putting it's name into it:
+
+```javascript
+["your-other", "external-script", "hubot-pomodoro"]
+```
+
 ## Commands
 
 * `start pomodoro` - start a new pomodoro
