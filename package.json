@@ -1,0 +1,21 @@
+{
+  "name": "hubot-pomodoro",
+  "version": "1.0.0",
+  "description": "Hubot's pomodoro timer",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ajnasz/hubot-pomodoro"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hubot",
+    "pomodoro",
+    "hubot-script",
+    "hubot-scripts"
+  ],
+  "author": "Lajos Koszti",
+  "license": "MIT"
+}
