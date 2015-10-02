@@ -62,6 +62,10 @@ var brain = (function () {
 				newBrain.data.apomodoros = {};
 			}
 
+			if (!newBrain.data.apomodoros.user) {
+				newBrain.data.apomodoros.user = {};
+			}
+
 			instanceBrain = newBrain;
 		},
 
