@@ -17,5 +17,9 @@
     "hubot-scripts"
   ],
   "author": "Lajos Koszti",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "grunt-release": "^0.13.0"
+  }
 }
