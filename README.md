@@ -20,4 +20,5 @@ Open `external-scripts.json` and enable the module, by putting it's name into it
 * `start pomodoro <time>` - start a new pomodoro with a duration of <time> minutes
 * `stop pomodoro` - stop a pomodoro
 * `pomodoro?` - shows the details of the current pomodoro
+* `pomodoro <username>?` - shows the details of <username>'s current pomodoro
 * `all pomodoros?` - shows the details of all of the running pomodoros
