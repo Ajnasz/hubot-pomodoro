@@ -8,7 +8,7 @@
     "url": "https://github.com/Ajnasz/hubot-pomodoro"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "$(npm bin)/mocha"
   },
   "keywords": [
     "hubot",
@@ -19,7 +19,10 @@
   "author": "Lajos Koszti",
   "license": "MIT",
   "dependencies": {
+    "chai": "^3.3.0",
     "grunt": "^0.4.5",
-    "grunt-release": "^0.13.0"
+    "grunt-release": "^0.13.0",
+    "mocha": "^2.3.3",
+    "sinon": "^1.17.1"
   }
 }
