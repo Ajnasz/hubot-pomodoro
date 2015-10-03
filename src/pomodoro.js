@@ -48,6 +48,21 @@ function getRemaining(pomodoro) {
 	return reverseJSLen(pomodoro.started + calcJSLen(pomodoro.len) - Date.now());
 }
 
+function isWaitingPomodoro(pomodoro) {
+	'use strict';
+	if (isDef(pomodoro) && pomodoro !== null && pomodoro.len && pomodoro.started) {
+		return (pomodoro.started + calcJSLen(pomodoro.len) > Date.now() + 1);
+	}
+
+	return false;
+}
+
+function isValidPomodoro(pomodoro) {
+	'use strict';
+	return (isDef(pomodoro) && pomodoro !== null && pomodoro.len && pomodoro.started);
+}
+
+
 var brain = (function () {
 	'use strict';
 	var instanceBrain = null;
@@ -94,6 +109,14 @@ var brain = (function () {
 
 				return null;
 			}, getAllData());
+		},
+
+		getPomodoro: function (userName) {
+			return this.get('user.' + userName);
+		},
+
+		setPomodoro: function (userName, value) {
+			return this.set('user.' + userName, value);
 		}
 	};
 }());
@@ -102,30 +125,18 @@ module.exports = function (robot) {
 	'use strict';
 	brain.init(robot.brain);
 
-	function isWaitingPomodoro(userName) {
-		var value = brain.get('user.' + userName);
-
-		if (isDef(value) && value !== null && value.len && value.started) {
-			return (value.started + calcJSLen(value.len) > Date.now() + 1);
-		}
-
-		return false;
-	}
-
-	function isValidPomodoro(pomodoro) {
-		return (isDef(pomodoro) && pomodoro !== null && pomodoro.len && pomodoro.started);
-	}
-
 	function hasPomodoro(userName) {
-		return isWaitingPomodoro(userName);
+		var pomodoro = brain.getPomodoro(userName);
+
+		return isWaitingPomodoro(pomodoro);
 	}
 
 	function stopPomodoro(userName) {
-		brain.set('user.' + userName, null);
+		brain.setPomodoro(userName, null);
 	}
 
 	function completePomodoro(userName) {
-		var pomodoro = brain.get('user.' + userName);
+		var pomodoro = brain.getPomodoro(userName);
 		robot.logger.info('pomodoro completed: %s', userName);
 		stopPomodoro(userName);
 
@@ -139,7 +150,7 @@ module.exports = function (robot) {
 
 		robot.logger.info('start pomodoro for user %s, length %d', userName, len);
 
-		brain.set('user.' + userName, {
+		brain.setPomodoro(userName, {
 			started: Date.now(),
 			envelope: envelope,
 			len: len,
@@ -201,7 +212,7 @@ module.exports = function (robot) {
 		var minutes;
 
 		if (hasPomodoro(userName)) {
-			pomodoro = brain.get('user.' + userName);
+			pomodoro = brain.getPomodoro(userName);
 			minutes = getRemaining(pomodoro);
 
 			msg.send('There are still ' + minutes + ' minutes in this pomodoro');
@@ -216,7 +227,7 @@ module.exports = function (robot) {
 		var minutes;
 
 		if (hasPomodoro(userName)) {
-			pomodoro = brain.get('user.' + userName);
+			pomodoro = brain.getPomodoro(userName);
 			minutes = getRemaining(pomodoro);
 
 			msg.send('There are still ' + minutes + ' minutes in ' + userName + '\'s pomodoro');
