@@ -63,7 +63,7 @@ function isValidPomodoro(pomodoro) {
 }
 
 
-var brain = (function () {
+var createBrain = function () {
 	'use strict';
 	var instanceBrain = null;
 
@@ -119,10 +119,12 @@ var brain = (function () {
 			return this.set('user.' + userName, value);
 		}
 	};
-}());
+};
 
 module.exports = function (robot) {
 	'use strict';
+	var brain = createBrain();
+
 	brain.init(robot.brain);
 
 	function hasPomodoro(userName) {
@@ -137,6 +139,7 @@ module.exports = function (robot) {
 
 	function completePomodoro(userName) {
 		var pomodoro = brain.getPomodoro(userName);
+
 		robot.logger.info('pomodoro completed: %s', userName);
 		stopPomodoro(userName);
 
@@ -145,22 +148,15 @@ module.exports = function (robot) {
 		}
 	}
 
-	function startPomodoro(userName, envelope, len) {
-		len = len || defaultLength;
-
-		robot.logger.info('start pomodoro for user %s, length %d', userName, len);
-
-		brain.setPomodoro(userName, {
-			started: Date.now(),
-			envelope: envelope,
-			len: len,
-			user: userName
-		});
-	}
+	var timer;
 
 	function cron() {
-		setTimeout(function () {
+		if (timer) {
+			clearTimeout(timer);
+		}
+		timer = setTimeout(function () {
 			var users = brain.get('user');
+
 			Object.keys(users).filter(function (user) {
 				return users[user] !== null;
 			}).forEach(function (user) {
@@ -178,13 +174,33 @@ module.exports = function (robot) {
 				}
 			});
 
-			cron();
+			var next = Object.keys(brain.get('user')).filter(function (user) {
+				return users[user] !== null;
+			});
+
+			if (next.length > 0) {
+				cron();
+			}
 		}, 1000);
 	}
 
-	cron();
 
-	robot.respond(/start pomodoro ?(\d+)?/i, function (msg) {
+	function startPomodoro(userName, envelope, len) {
+		len = len || defaultLength;
+
+		robot.logger.info('start pomodoro for user %s, length %d', userName, calcJSLen(len));
+
+		brain.setPomodoro(userName, {
+			started: Date.now(),
+			envelope: envelope,
+			len: len,
+			user: userName
+		});
+
+		cron();
+	}
+
+	robot.respond(/start pomodoro ?([\d.]+)?/i, function (msg) {
 		var userName = msg.message.user.name;
 
 		if (hasPomodoro(userName)) {
@@ -251,4 +267,12 @@ module.exports = function (robot) {
 			msg.send('There is no started a pomodoro');
 		}
 	});
+
+	return {
+		stop: function () {
+			if (timer) {
+				clearTimeout(timer);
+			}
+		}
+	};
 };
