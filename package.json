@@ -16,6 +16,9 @@
     "hubot-script",
     "hubot-scripts"
   ],
+  "engines": {
+	  "node": ">=6"
+  },
   "author": "Lajos Koszti",
   "license": "MIT",
   "dependencies": {},
