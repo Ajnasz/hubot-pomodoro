@@ -1,6 +1,6 @@
 {
   "name": "hubot-pomodoro",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Hubot's pomodoro timer",
   "main": "index.js",
   "repository": {
