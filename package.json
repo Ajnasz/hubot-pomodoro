@@ -1,6 +1,6 @@
 {
   "name": "hubot-pomodoro",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Hubot's pomodoro timer",
   "main": "index.js",
   "repository": {
@@ -20,10 +20,10 @@
     "node": ">=6"
   },
   "files": [
-	  "index.js",
-	  "src/pomodoro.js",
-	  "README.md",
-	  "LICENSE"
+    "index.js",
+    "src/pomodoro.js",
+    "README.md",
+    "LICENSE"
   ],
   "author": "Lajos Koszti",
   "license": "MIT",
