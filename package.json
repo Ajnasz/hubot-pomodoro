@@ -19,6 +19,12 @@
   "engines": {
     "node": ">=6"
   },
+  "files": [
+	  "index.js",
+	  "src/pomodoro.js",
+	  "README.md",
+	  "LICENSE"
+  ],
   "author": "Lajos Koszti",
   "license": "MIT",
   "dependencies": {},
